@@ -9,6 +9,7 @@ import config from './router/config';
 import login  from './router/login';
 import users from './router/users';
 import typenif from './router/typenif';
+import taxes from './router/taxes';
 
 
 const mongoose = require('mongoose');
@@ -39,6 +40,7 @@ function main(){
      * Use routes
      */
     app.use('/config', config);
+    app.use('/taxes', taxes);
     app.use('/typenif', typenif);
     app.use('/users', users);
     app.use('/login', login);

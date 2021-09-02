@@ -6,4 +6,4 @@ var dataTypenif:any = [
     {"code" : 5, "name":"Interno","valida":false}
 ]
 
-export default dataTypenif;
+export default dataTypenif; 

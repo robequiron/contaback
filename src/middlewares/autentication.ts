@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
+import { Request, Response} from 'express';
 const SEED:string = require('../config/config').SEED;
 
 /**
  * Check token
  */
-var checkToken = (req:any, res:any, next:any)=>{
+var checkToken = (req:Request, res:Response, next:any)=>{
 
     var token:any = req.query.token;
     
@@ -20,8 +21,8 @@ var checkToken = (req:any, res:any, next:any)=>{
                 }
             })
         }
-
-        res.usuario  = decoded.usuario;
+        
+       req.body.usuario  = decoded.usuario ;
 
         next();
     })

@@ -1,31 +1,34 @@
 import {Router, Request, Response} from 'express';
 import autentication from '../middlewares/autentication';
+
 import configSchema from '../schemas/config';
-import typenif from 'schemas/typenif';
-import  dataTypenif  from 'data/typenif';
+import newEmpresa from '../data/empresa';
+import { ConfigModel } from '../models/config.model';
+import { Mongoose } from 'mongoose';
 
 
 /**
  * Router express
  */
-const router = Router();
+ const  router = Router();
 
 /**
  * Get config
  */
-router.get('/',  async(req:Request, res:Response)=>{
+router.get('/',  autentication,   async(req:Request, res:Response)=>{
 
 
     let id:string = req.params.id;
 
+  
     await configSchema.findOne().exec(
 
         (err:any, config:any)=>{
             if(!config) {
-                let c = new configSchema({name:'Nombre de empresa nueva', nif:"78487761P"});
+                let c = new configSchema(newEmpresa);
                 c.save((err:any, configSave:any)=>{
                     if(err) {
-                        return res.status(500).json({
+                        res.status(500).json({
                         ok:false,
                         error:  err,
                         message: 'Error al crear el registro de configuración'
@@ -37,7 +40,7 @@ router.get('/',  async(req:Request, res:Response)=>{
                     })
                 });
             } else {
-                return res.status(200).json({
+                res.status(200).json({
                     ok:true,
                     config:config
                 })
@@ -53,6 +56,48 @@ router.get('/',  async(req:Request, res:Response)=>{
 })
 
 
+/**
+ * Update config
+ */
+router.put('/:id', autentication, async(req:Request, res:Response)=>{
+
+    let id = req.params.id;
+   
+    if (!id) {
+        return res.status(500).json({
+        ok:false,
+        message: 'Error no viene identificador'
+        })
+    }
+
+
+    let body = req.body;
+
+    let config:ConfigModel = new ConfigModel();
+    config.codeNif = body.codeNif;
+    config.name = body.name;
+    config.nif = body.nif;
+
+
+    configSchema.findByIdAndUpdate(id, config, (err:any, doc:any)=>{
+        
+        
+        if(err) {
+            return res.status(500).json({
+            ok:false,
+            error:  err,
+            message: 'Error al modificar la configuración'
+            })
+        }
+
+        res.status(200).json({
+        ok:true,
+        menssage:"Modificado correctamente"
+        })
+        
+    })
+
+})
 
 
 export default router;

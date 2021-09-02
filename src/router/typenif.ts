@@ -17,7 +17,8 @@ const router = Router();
  * Get all typeNIf
  */
 router.get('/', autentication, async(req:Request,res:Response)=>{
-    
+
+
     await typeNifSchema.find().exec(
         (err:any, data:any)=>{
             let typenif:any;
@@ -28,7 +29,6 @@ router.get('/', autentication, async(req:Request,res:Response)=>{
                 message: 'Error en el servidor al cargar los tipos de nif'
                 })
             }
-            console.log(data.length)
             //Si no existe tipo de nif crear 
             if (data.length===0) {
                 
