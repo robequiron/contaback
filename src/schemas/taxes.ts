@@ -17,6 +17,7 @@ let taxesSchema = new Schema({
             max: [9, 'El número máximo no puede ser superior a 9']
     },
     name:  {type:String, required: [true, 'El nombre es obligatorio']},
+    percentages:[percentage]
  
 })
 

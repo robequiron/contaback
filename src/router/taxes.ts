@@ -145,14 +145,13 @@ router.post('/', autentication, async(req:Request, res:Response)=>{
     let taxSave = new taxes({
         code: body.code,
         name: body.name,
-        percentages: []
+        percentages: [] = []
        
     })
-    console.log(taxSave)
-
 
     await taxSave.save( (err:any, taxDB:any)=>{
-        console.log(err)
+       
+       
         if (err) {
            
             res.status(500).json({
