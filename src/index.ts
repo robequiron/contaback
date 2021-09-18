@@ -6,11 +6,13 @@ import appRouter from './router/app';
 
 
 import config from './router/config';
+import cuenta from './router/cuentas';
 import login  from './router/login';
 import users from './router/users';
+import postal from './router/postal'
 import typenif from './router/typenif';
 import taxes from './router/taxes';
-
+import vias from './router/vias';
 
 const mongoose = require('mongoose');
 
@@ -40,10 +42,13 @@ function main(){
      * Use routes
      */
     app.use('/config', config);
+    app.use('/cuentas', cuenta);
+    app.use('/login', login);
+    app.use('/postal',postal);
+    app.use('/vias', vias);
     app.use('/taxes', taxes);
     app.use('/typenif', typenif);
     app.use('/users', users);
-    app.use('/login', login);
     app.use('/',appRouter);
     
 

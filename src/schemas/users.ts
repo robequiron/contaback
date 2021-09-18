@@ -10,7 +10,7 @@ var validRoles = {
 
 
 /**
- * User models
+ * User shema
  */
 var userSchema = new Schema({
     name: {type:String, required: [true, "El usuario es obligatorio"], uppercase:true},

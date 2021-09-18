@@ -2,16 +2,31 @@ import { Router,Request,Response } from "express";
 import { TaxesModel } from "../models/taxes.model";
 import taxes from "../schemas/taxes";
 import autentication from "../middlewares/autentication";
-
+import ObjectID from "bson-objectid";
 
 const router = Router();
+
 /**
  * Obtenemos todos los impuestos
  */
 router.get('/', autentication, async(req:Request, res:Response)=>{
         
-    
-        let query:any = {};
+   
+        let nameSearch = new RegExp(req.query.name as string | '', 'i');
+        let code = parseInt(req.query.code as string) | 0;
+        let codeSearch = {};
+        if (code===0) {
+            codeSearch = {$gt:0};
+        } else {
+            codeSearch = {$eq:code}
+        }
+
+        //Query
+        let query:any = {
+            name: nameSearch,
+            code : codeSearch
+        };
+
         //Paginación
         let from:number = Number(req.query.page) || 0;
         let limit:number = Number(req.query.pageSize)|| 10;
@@ -26,9 +41,7 @@ router.get('/', autentication, async(req:Request, res:Response)=>{
         if (sortOrder==='descend') { order =-1};
     
         let orderName: number = 0;
-        let orderEmail:number = 0;
         if (sortField==='name') {orderName=order};
-        if (sortField==='email') {orderEmail=order}
         
         //Buscamos por el codigo directamente
         if (req.query.code) {
@@ -38,6 +51,9 @@ router.get('/', autentication, async(req:Request, res:Response)=>{
         await taxes.find(query)
         .skip(from)
         .limit(limit)
+        .sort({
+            name:orderName
+        })
         .exec(
             (err:any, taxesdb:any)=>{
                 taxesdb = taxesdb as TaxesModel[];
@@ -51,7 +67,7 @@ router.get('/', autentication, async(req:Request, res:Response)=>{
                 }
 
                 taxes.countDocuments(query,(err:any, count:any)=>{
-                    return res.status(200).json({
+                    res.status(200).json({
                     ok:true,
                     count: count,
                     taxes:taxesdb,
@@ -71,40 +87,75 @@ router.get('/', autentication, async(req:Request, res:Response)=>{
  */
 router.get('/lastcode', autentication, async(req:Request, res: Response)=>{
 
-    taxes.find()
-    .sort({code:-1})
-    .limit(1)
-    .exec((err:any, taxdb:any)=>{
-        if (err) {
+    let count:number=0;
+
+    
+
+
+    //Si no hay impuestos creados retorno 1
+    taxes.countDocuments({},(err,tax:any)=>{
+        
+        if(err) {
             return res.status(500).json({
             ok:false,
             error:  err,
-            message: 'Error al consulta el último código disponible'
+            message: 'Error al obtener el total de registros'
+            })
+        }
+        
+        count = tax;
+        
+        if (tax===0) {
+            return res.status(200).json({
+                ok:true,
+                lastCode: 0
             })
         }
 
-        if (taxdb[0].code===9) {
-            return res.status(500).json({
-            ok:false,
-            message: 'Error no existen más códigos disponible'
+        taxes.find()
+        .sort({code:-1})
+        .limit(1)
+        .exec((err:any, taxdb:any)=>{
+            if (err) {
+                return res.status(500).json({
+                ok:false,
+                error:  err,
+                message: 'Error al consulta el último código disponible'
+                })
+            }
+
+            if (taxdb[0].code===9) {
+                return res.status(500).json({
+                ok:false,
+                message: 'Error no existen más códigos disponible'
+                })
+            }
+
+            res.status(200).json({
+            ok:true,
+            lastCode: taxdb[0].code 
             })
-        }
 
-        return res.status(200).json({
-        ok:true,
-        lastCode: taxdb[0].code
-        })
+        }) 
+    
+    })
 
-    }) 
+   
+
+      
+
+       
 
 })
-
+/**
+ * Obtenemos el impuesto según el identificador
+ */
 router.get('/:id', autentication, async(req:Request, res:Response)=>{
 
     let id:string = req.params.id;
 
     if (!id) {
-        res.status(500).json({
+        return res.status(500).json({
         ok:false,
         message: 'Error no existe identificador para encontrar el registro'
         })
@@ -112,7 +163,7 @@ router.get('/:id', autentication, async(req:Request, res:Response)=>{
 
     taxes.findById(id, (err:any , taxdb:any)=>{
         if (err) {
-            res.status(500).json({
+            return res.status(500).json({
             ok:false,
             error:  err,
             message: 'Error al buscar buscar el impuesto'
@@ -142,6 +193,7 @@ router.post('/', autentication, async(req:Request, res:Response)=>{
         })
     }
 
+
     let taxSave = new taxes({
         code: body.code,
         name: body.name,
@@ -154,7 +206,7 @@ router.post('/', autentication, async(req:Request, res:Response)=>{
        
         if (err) {
            
-            res.status(500).json({
+            return res.status(500).json({
             ok:false,
             error:  err,
             message: 'Error al crear el impuesto'
@@ -179,10 +231,12 @@ router.put('/:id', autentication, async(req:Request, res:Response)=>{
     let id = req.params.id;
     let body = req.body as TaxesModel;
 
+    
+
     taxes.findById(id, (err:any, taxDB:any)=>{
         
         if (err) {
-            res.status(500).json({
+            return res.status(500).json({
             ok:false,
             error:  err,
             message: 'Error al encontrar el impuesto para modificar'
@@ -190,11 +244,20 @@ router.put('/:id', autentication, async(req:Request, res:Response)=>{
         }
 
         taxDB.name = body.name;
-        taxDB.percentages = body.percentages;
+
+        body.percentages.forEach( (item)=>{
+            if(item._id==='') {
+                item._id = new ObjectID().toHexString();
+            }
+        })
+
+        taxDB.percentages = body.percentages; 
+
+        
 
         taxDB.save((err:any, taxSave:any)=>{
             if(err) {
-                res.status(500).json({
+                return res.status(500).json({
                 ok:false,
                 error:  err,
                 message: 'Error al modificar el impuesto'
@@ -209,6 +272,49 @@ router.put('/:id', autentication, async(req:Request, res:Response)=>{
 
 
     })
+
+})
+/**
+ * Eliminamos el impuesto
+ */
+router.delete('/:id', autentication, async(req:Request, res:Response)=>{
+    //Identificador del registro
+    var id:string = req.params.id as string | '';
+
+    //Buscamos el registro a eliminar
+    taxes.findById(id).then(
+        (resp:any)=>{
+            //Si tiene porcentajes eliminamos
+            if (resp.percentages.length===0) {
+                taxes.findByIdAndDelete(id).then(
+                    ()=>{
+                        return res.status(200).json({
+                        ok:true,
+                        taxes:resp
+                        })
+                    }
+                ).catch((err:any)=>{
+                    return res.status(500).json({
+                    ok:false,
+                    error:  err,
+                    message: 'Error al eliminar el registro'
+                    })
+                })
+            } else {
+                return res.status(200).json({
+                ok:false,
+                message: 'Error existen porcentajes, no es posible eliminar'
+                })
+            }
+        }
+    ).catch((err:any)=>{
+        return res.status(500).json({
+        ok:false,
+        error:  err,
+        message: 'Error en la busqueda del registro'
+        })
+    })
+
 
 })
 

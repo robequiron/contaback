@@ -5,6 +5,11 @@
  export class Percentage {
     
     /**
+     * Identificador del porcentaje
+     */
+    _id:string='';
+
+    /**
      * Nombre de porcentage del impuesto
      */
     name:string;

@@ -7,8 +7,7 @@ const SEED:string = require('../config/config').SEED;
  */
 var checkToken = (req:Request, res:Response, next:any)=>{
 
-    var token:any = req.query.token;
-    
+    var token:any = req.query.token || req.headers.token;
 
     jwt.verify(token, SEED, (err:any,decoded:any)=>{
 

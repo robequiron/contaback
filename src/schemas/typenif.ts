@@ -13,5 +13,5 @@ var typeNifSchema = new Schema({
 
 typeNifSchema.plugin(uniqueValidator, {menssage: '{PATH} debe ser único'});
 
-
-export default mongoose.model('typenif', typeNifSchema);
+//TODO: CREAR MODELO TIPO DE NIF
+export default mongoose.model('typenif', typeNifSchema,'typenifs');
