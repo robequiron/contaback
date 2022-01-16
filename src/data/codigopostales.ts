@@ -1,6 +1,6 @@
 var dataPostal:any = [
-{"provincia" : "Araba/Álava" , "poblacion": "Alegría-Dulantzi"      , "code": 240},
-{"provincia" : "Ávila"       , "poblacion": "Candeleda"             , "code": 548},
+{"provincia" : "Araba/Álava" , "poblacion": "Alegría-Dulantzi"      , "code": 1240},
+{"provincia" : "Ávila"       , "poblacion": "Candeleda"             , "code": 5480},
 {"provincia" : "Araba/Álava" , "poblacion": "Vitoria-Gasteiz"       , "code": 1001},
 {"provincia" : "Araba/Álava" , "poblacion": "Vitoria-Gasteiz"       , "code": 1002},
 {"provincia" : "Araba/Álava" , "poblacion": "Vitoria-Gasteiz"       , "code": 1003},
@@ -14662,8 +14662,8 @@ var dataPostal:any = [
 {"provincia" : "Melilla" , "poblacion" : "Melilla" , "code":52004},
 {"provincia" : "Melilla" , "poblacion" : "Melilla" , "code":52005},
 {"provincia" : "Melilla" , "poblacion" : "Melilla" , "code":52006},
-{"provincia" : "Tarragona" , "poblacion" : "Calafell" , "code":73820},
-{"provincia" : "Zaragoza" , "poblacion" : "Zaragoza" , "code":90007}
+{"provincia" : "Tarragona" , "poblacion" : "Calafell" , "code":43820},
+{"provincia" : "Zaragoza" , "poblacion" : "Zaragoza" , "code":50001}
 ];
 
 

@@ -4,15 +4,14 @@ var uniqueValidator = require("mongoose-unique-validator");
 
 
 const email = new Schema({
-    email:{type:String, unique:true },
+    email:{type:String},
     description: {type:String},
-    default:{type:Boolean}
 })
 
-email.plugin(uniqueValidator, {menssage: '{PATH} debe ser único'});
+//email.plugin(uniqueValidator, {menssage: '{PATH} debe ser único'});
 
 var categories = {
-    values: ['R','P'],
+    values: ['R','P','I'],
     menssage: '{VALUE} no es una categoría válida',
 };
 
@@ -21,20 +20,19 @@ var sexo = {
     menssage: '{VALUE} no es un sexo válido'
 }
 
-
-//TODO: CREAR TABLA DE CATEGORIAS  
 const cuentaSchema = new Schema({
     code:{type:Number, required:[true,'El código es obligatorio'], max:[4, 'No puede ser superior a 5 dígitos']},
-    category: {type:String, require:[true, 'La categoría es obligatoria'], enum:categories, default:'R'},
+    category: {type:String, required:[true, 'La categoría es obligatoria'], enum:categories, default:'R'},
     name:{type:String, required:[true, 'El nombre es obligatorio']},
     surname:{type:String, required:[true,'El apellido es obligatorio']},
     surname2: {type:String},
-    typeNif: {type:Schema.Types.ObjectId, ref:'typenif', require:[true,'El tipo de NIF es obligatorio']},
+    typeNif: {type:Number},
     nif: {type:String},
     sex: {type:String, enum:sexo},
     dateBirth: {type:Date},
     locked:{type:Boolean},
-    email: [email]
-})
+    email: [email],
+    register:{type:Array}
+});
 
 export default mongoose.model<cuentasModel>('cuenta',cuentaSchema,'cuentas');

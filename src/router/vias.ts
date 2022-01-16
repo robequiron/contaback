@@ -46,7 +46,7 @@ router.get('/all', autentication, async(req:Request, res:Response)=>{
             } else {
                 res.status(200).json({
                 ok:true,
-                vias:viasdb
+                data:viasdb
                 })
             }
         }

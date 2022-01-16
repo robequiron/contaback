@@ -71,12 +71,14 @@ router.put('/:id', autentication, async(req:Request, res:Response)=>{
     }
 
 
-    let body = req.body;
+    let body = req.body as ConfigModel;
 
     let config:ConfigModel = new ConfigModel();
     config.codeNif = body.codeNif;
     config.name = body.name;
     config.nif = body.nif;
+    config.workplace = body.workplace;
+    config.workplaceCuenta = body.workplaceCuenta;
 
 
     configSchema.findByIdAndUpdate(id, config, (err:any, doc:any)=>{

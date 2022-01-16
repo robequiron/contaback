@@ -20,6 +20,16 @@ export class ConfigModel {
      */
     codeNif:number=1;
 
+    /**
+     * Trabajar con más de un centro de trabajo
+     */
+    workplace:boolean = false;
+
+    /**
+     * Trabajar con más de un centro de trabajo en la cuentas personales
+     */
+    workplaceCuenta:boolean=false;
+
     constructor(){
         
     }

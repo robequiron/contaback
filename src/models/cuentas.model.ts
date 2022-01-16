@@ -1,11 +1,10 @@
+import { RegisterModel } from "./register.model";
+
 /**
  * Cuentas personales 
  */
 class Email {
-    /**
-     * Identificador email
-     */
-    public _id:string='';
+
 
     /**
      * email
@@ -17,10 +16,6 @@ class Email {
      */
     public description:string='';
 
-    /**
-     * Correo principal o por defecto
-     */
-    public default:boolean=false;
 
     /**
      * Constuctor  
@@ -66,7 +61,7 @@ export class cuentasModel {
     /**
      * Tipo de nif.
      */
-    typenif:string ='';
+    typeNif:number=1;
 
     /**
      * Número de identificación de la persona o razón social
@@ -92,6 +87,11 @@ export class cuentasModel {
      * Email
      */
     email:Email[] = [];
+
+    /**
+     * Registro de modificaciones y creaciones
+     */
+    register:RegisterModel[]=[];
 
     /**
      * Constuctor  

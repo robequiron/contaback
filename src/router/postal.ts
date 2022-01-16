@@ -6,7 +6,7 @@ import postal from '../schemas/postal';
 const router = Router();
 
 /**
- * Obtenemos todas los codigos postales
+ * Obtenemos todos los codigos postales
  */
 router.get('/all', autentication, async(req:Request, res:Response)=>{
 
@@ -40,6 +40,43 @@ router.get('/all', autentication, async(req:Request, res:Response)=>{
        
     )
 
+
+
+})
+/**
+ * Obtenemos los registro según el código postal
+ */
+router.get('/code/:code', autentication,  async(req:Request, res:Response) => {
+  
+    let code:number= parseInt(req.params.code);
+
+
+    if(!code) {
+        return res.status(500).json({
+        ok:false,
+        error:  'Error params code',
+        message: 'Error no existe código para buscar'
+        })
+    }
+
+
+
+    await postal.find({code: code}).exec(
+        (err:any , postalModel:PostalModel[])=>{
+            if (err) {
+                return res.status(500).json({
+                ok:false,
+                error:  err,
+                message: 'Error '
+                })
+            }
+
+            return res.status(200).json({
+            ok:true,
+            data:postalModel
+            })
+     });
+    
 
 
 })

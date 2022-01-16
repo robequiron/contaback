@@ -4,9 +4,10 @@ import cors from 'cors';
 import bodyParser  from 'body-parser';
 import appRouter from './router/app';
 
-
+import adress from './router/adress';
 import config from './router/config';
 import cuenta from './router/cuentas';
+import workplace from './router/workplaces';
 import login  from './router/login';
 import users from './router/users';
 import postal from './router/postal'
@@ -41,8 +42,10 @@ function main(){
     /**
      * Use routes
      */
+    app.use('/adress', adress);
     app.use('/config', config);
     app.use('/cuentas', cuenta);
+    app.use('/workplace', workplace);
     app.use('/login', login);
     app.use('/postal',postal);
     app.use('/vias', vias);
