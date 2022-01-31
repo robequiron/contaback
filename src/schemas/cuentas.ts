@@ -3,7 +3,7 @@ import mongoose, {Schema} from 'mongoose';
 var uniqueValidator = require("mongoose-unique-validator");
 
 
-const email = new Schema({
+let email = new Schema({
     email:{type:String},
     description: {type:String},
 })

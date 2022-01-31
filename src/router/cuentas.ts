@@ -5,6 +5,8 @@ import autentication from '../middlewares/autentication';
 import cuentas from '../schemas/cuentas';
 import workplaces from '../schemas/workplaces';
 import { RegisterModel } from '../models/register.model';
+import { emailModel } from '../models/email.model';
+import ObjectID from 'bson-objectid';
 
 const router = Router();
 
@@ -246,6 +248,13 @@ router.put('/:id', autentication, async(req:Request, res:Response)=>{
             message: 'Error al encontrar la cuenta para modificar'
             })
         }
+
+        body.email.forEach( (item:emailModel)=>{
+                if (item._id==='') {
+                    item._id = new ObjectID().toHexString();
+                }
+        })
+
         
         cuentaDB.name = body.name;
         cuentaDB.surname = body.surname;
@@ -255,9 +264,10 @@ router.put('/:id', autentication, async(req:Request, res:Response)=>{
         cuentaDB.email = body.email;
         cuentaDB.sex = body.sex;
 
-        console.log(cuentaDB);
+     
 
         cuentaDB.save((err:any, cuentaSave:any)=>{
+            console.log(err)
             if(err) {
                 return res.status(500).json({
                 ok:false,

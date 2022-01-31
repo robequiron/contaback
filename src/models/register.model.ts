@@ -1,7 +1,7 @@
 /**
  * Clase modelo registro
  */
-export class RegisterModel {
+export default class RegisterModel {
 
     /**
      * Identificador que realiza el registro

@@ -1,27 +1,5 @@
 import { RegisterModel } from "./register.model";
-
-/**
- * Cuentas personales 
- */
-class Email {
-
-
-    /**
-     * email
-     */
-    public email:string='';
-
-    /**
-     * Descripción de email. Nombre de la persona, organización,etc
-     */
-    public description:string='';
-
-
-    /**
-     * Constuctor  
-     **/   
-    constructor(){};
-}
+import { emailModel } from "./email.model";
 
 /**
  * Cuentas personales
@@ -86,7 +64,7 @@ export class cuentasModel {
     /**
      * Email
      */
-    email:Email[] = [];
+    email:emailModel[] = [];
 
     /**
      * Registro de modificaciones y creaciones

@@ -7,6 +7,7 @@ import appRouter from './router/app';
 import adress from './router/adress';
 import config from './router/config';
 import cuenta from './router/cuentas';
+import grupos from './router/grupos';
 import workplace from './router/workplaces';
 import login  from './router/login';
 import users from './router/users';
@@ -45,6 +46,7 @@ function main(){
     app.use('/adress', adress);
     app.use('/config', config);
     app.use('/cuentas', cuenta);
+    app.use('/grupos', grupos);
     app.use('/workplace', workplace);
     app.use('/login', login);
     app.use('/postal',postal);
