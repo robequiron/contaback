@@ -4,7 +4,7 @@ import mongoose, {Schema} from 'mongoose';
  * Shcema workplace - Centro de trabajo
  */
 const workplaceSchema = new Schema({
-    code:{type:Number, require:[true, 'El código es obligatorio'], max:[99,'No puede ser superior a 2 dígitos']},
+    code:{type:Number, required:[true, 'El código es obligatorio'], max:[99,'No puede ser superior a 2 dígitos']},
     _idCuenta:{type:Schema.Types.ObjectId, ref:'cuenta'},
     name:{type:String},
     headquarters:{type:Boolean, default:false} 

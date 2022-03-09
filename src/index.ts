@@ -4,6 +4,8 @@ import cors from 'cors';
 import bodyParser  from 'body-parser';
 import appRouter from './router/app';
 
+
+import accounts from './router/accounts'
 import adress from './router/adress';
 import config from './router/config';
 import cuenta from './router/cuentas';
@@ -12,9 +14,11 @@ import workplace from './router/workplaces';
 import login  from './router/login';
 import users from './router/users';
 import postal from './router/postal'
+import subgrupos from './router/subgrupos';
 import typenif from './router/typenif';
 import taxes from './router/taxes';
 import vias from './router/vias';
+
 
 const mongoose = require('mongoose');
 
@@ -43,6 +47,7 @@ function main(){
     /**
      * Use routes
      */
+    app.use('/accounts', accounts);
     app.use('/adress', adress);
     app.use('/config', config);
     app.use('/cuentas', cuenta);
@@ -51,6 +56,7 @@ function main(){
     app.use('/login', login);
     app.use('/postal',postal);
     app.use('/vias', vias);
+    app.use('/subgrupos',subgrupos);
     app.use('/taxes', taxes);
     app.use('/typenif', typenif);
     app.use('/users', users);

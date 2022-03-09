@@ -28,24 +28,27 @@ router.get('/',autentication, async(req:Request, res:Response)=>{
         if(data.length===0) {
             grupoSchema.insertMany(dataGrupos).then(
                 (resp:any)=>{
-                    return res.status(200).json({
+                    res.status(200).json({
                     ok:true,
                     data:resp
                     })
+                    
                 }
             ).catch((e)=>{
                 return res.status(500).json({
                 ok:false,
-                error:  err,
+                error: e,
                 message: 'Error al crear los grupos contables'
                 })
             })
-        } 
+        } else {
+            res.status(200).json({
+                ok:true,
+                data: data
+            })
+        }
 
-        return res.status(200).json({
-            ok:true,
-            data: data
-        })
+       
     })
 
 
